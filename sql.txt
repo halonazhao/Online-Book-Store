@@ -1,0 +1,59 @@
+user:BB
+pin:ZZ
+Z1995y09z00
+create table USERBOOK
+(
+   USERNAME             VARCHAR2(30)         not null,
+   PASSWORD             VARCHAR2(18)         not null,
+   ROLE                 NUMBER(1)            not null,
+   constraint PK_USER primary key (USERNAME)
+);
+
+create table BOOKORDER 
+(
+   ORDERNO              VARCHAR2(30)         not null,
+   USERNAME             VARCHAR2(30),
+   TOTALPRICE           NUMBER(5,1),
+   COMPLETEDATE         DATE,
+   constraint PK_BOOKORDER primary key (ORDERNO)
+);
+
+alter table BOOKORDER
+   add constraint FK_BOOKORDE_REFERENCE_USER foreign key (USERNAME)
+      references USERBOOK (USERNAME);
+
+
+create table BOOK 
+(
+   ISBN                 VARCHAR2(18)         not null,
+   NAME                 VARCHAR2(30),
+   AUTHOR               VARCHAR2(30),
+   PUBLICATION          VARCHAR2(30),
+   PUBLICATIONDATE      DATE,
+   PRICE                NUMBER(5,1)          not null,
+   DESCRIPTION          VARCHAR2(4000),
+   PICTURE              BLOB,
+   constraint PK_BOOK primary key (ISBN)
+);
+
+create table ORDERDETAIL 
+(
+   ID                   NUMBER(9)            not null,
+   ORDERNO              VARCHAR2(30)         not null,
+   ISBN                 VARCHAR2(18)         not null,
+   AMOUNT               NUMBER(5)            not null,
+   SOLDPRICE            NUMBER(5,1),
+   constraint PK_ORDERDETAIL primary key (ID)
+);
+
+alter table ORDERDETAIL
+   add constraint FK_ORDERDET_REFERENCE_BOOKORDE foreign key (ORDERNO)
+      references BOOKORDER (ORDERNO);
+
+alter table ORDERDETAIL
+   add constraint FK_ORDERDET_REFERENCE_BOOK foreign key (ISBN)
+      references BOOK (ISBN);
+
+insert into userbook values('admin', 'Z1995y09z01', 1);
+insert into userbook values('Jason', 'C321', 2);
+insert into userbook values('Alex', 'C321', 3);
